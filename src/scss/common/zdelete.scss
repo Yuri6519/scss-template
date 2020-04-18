@@ -1,0 +1,3 @@
+@mixin outline($color, $size: 1px) {
+  outline: $size solid $color;
+}
