@@ -1,11 +1,29 @@
 @import "vars.scss";
 
-// @mixin font-lato() {
-//   font-family: $font-lato;
+/*
+  1. font-XXX() - установка шрифта (font-family)
+  2. set-font() - установка шрифта (size...)
+  3. set-flex() - flex
+  4. set-grid() - grid
+  5. set-center-X() - margin 0 auto;
+  6. pos-center-y() - translateY(-50%)
+  7. pos-center-x() - translateX(-50%)
+  8. set-absolute() - установка в position = absolute
+  9. set-pseudo-absolute() - установка before or after в position = absolute
+  10. hover-ops($opacity: 0.7, $delay: 0.2s) - hover - opacity
+  11. set-button-close() - рисует кнопку close -> Х
+
+
+
+
+*/
+
+// @mixin font-roboto() {
+//   font-family: $font-roboto;
 // }
 
-// @mixin font-myriad() {
-//   font-family: $font-myriad;
+// @mixin font-roboto-cond() {
+//   font-family: $font-roboto-cond;
 // }
 
 @mixin set-font($size: $size-def, $weight: $weight-def, $line: $line-def, $color: $color-def) {
@@ -23,11 +41,16 @@
   flex-wrap: $wrap;
 }
 
-@mixin set-center-X {
+@mixin set-grid($col, $fr: 1fr) {
+  display: grid;
+  grid-template-columns: repeat($col, $fr);
+}
+
+@mixin set-center-X() {
   margin: 0 auto;
 }
 
-@mixin pos-center-y {
+@mixin pos-center-y() {
   transform: translateY(-50%);
 }
 
@@ -35,7 +58,15 @@
   transform: translateX(-50%);
 }
 
-@mixin set-absolute($top: 0, $left: 0, $bottom: 0, $right: 0, $width: 100%, $height: 100%, $bgc: transparent) {
+@mixin set-absolute(
+  $top: auto,
+  $left: auto,
+  $bottom: auto,
+  $right: auto,
+  $width: auto,
+  $height: auto,
+  $bgc: transparent
+) {
   position: absolute;
   display: block;
   top: $top;
@@ -58,16 +89,14 @@
 
 @mixin set-pseudo-absolute(
   $element,
-  $top: 0,
-  $left: 0,
-  $bottom: 0,
-  $right: 0,
-  $width: 100%,
-  $height: 100%,
+  $top: auto,
+  $left: auto,
+  $bottom: auto,
+  $right: auto,
+  $width: auto,
+  $height: auto,
   $bgc: transparent
 ) {
-  position: relative;
-
   @if $element == before {
     &::before {
       content: "";
@@ -81,9 +110,33 @@
   }
 }
 
-@mixin hover-ops($delay: 0.2s) {
+@mixin hover-ops($opacity: 0.7, $delay: 0.2s) {
   transition: all $delay ease;
   &:hover {
-    opacity: 0.7;
+    opacity: $opacity;
+  }
+}
+
+@mixin set-button-close(
+  $top: auto,
+  $left: auto,
+  $bottom: auto,
+  $right: auto,
+  $width: auto,
+  $height: auto,
+  $elm-wth: 100%,
+  $elm-ht: 1px,
+  $elm-cl: $color-black-1
+) {
+  @include set-absolute($top, $left, $bottom, $right, $width, $height);
+
+  @include set-pseudo-absolute(before, 50%, $width: $elm-wth, $height: $elm-ht, $bgc: $elm-cl);
+  @include set-pseudo-absolute(after, 50%, $width: $elm-wth, $height: $elm-ht, $bgc: $elm-cl);
+
+  &:before {
+    transform: translateY(-50%) rotate(45deg);
+  }
+  &:after {
+    transform: translateY(-50%) rotate(-45deg);
   }
 }
